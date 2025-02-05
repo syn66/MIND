@@ -33,7 +33,7 @@ class Simulator:
 
         self.sim_time = 0.0
         self.sim_step = 0.02
-        self.sim_horizon = 500
+        self.sim_horizon = 600
         self.agents = []
         self.frames = []
 
