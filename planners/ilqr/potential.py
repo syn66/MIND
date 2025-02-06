@@ -59,6 +59,7 @@ class StatePotential:
         return 2.0 * self.weight
 
 
+# 栅格地图 gridmap 的表达，避障约束
 class PotentialField:
     def __init__(self, field_offset, resolution, xx, yy, cost_field):
         self.offset = field_offset
@@ -68,6 +69,7 @@ class PotentialField:
         self.limits = (np.min(xx), np.max(xx), np.min(yy), np.max(yy))
         self.cost_field = cost_field
         self.cache = {}
+
 
     def get_potential(self, state):
         query_pos = state[:2]

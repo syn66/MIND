@@ -117,7 +117,11 @@ class MINDPlanner:
 
         traj_trees = []
         debug_info = []
+
+        print("scen_trees:")
+
         for scen_tree in scen_trees:
+            scen_tree.print()
             traj_tree, debug = self.get_traj_tree(scen_tree, lcl_smp)
             traj_trees.append(traj_tree)
             debug_info.append(debug)
