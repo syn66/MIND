@@ -69,7 +69,7 @@ class iLQR:
         self.L_xx = None
         self.L_ux = None
         self.L_uu = None
-        self.dV = None
+        # self.dV = None
         self.V_x = None
         self.V_xx = None
 
@@ -117,7 +117,7 @@ class iLQR:
         self.L_uu = np.empty((N, self.dynamics.action_size, self.dynamics.action_size))
 
         # cost to go 值函数
-        self.dV = np.empty(N) # cost to go 值函数的导数?
+        # self.dV = np.empty(N) # ilqr tutorial 中的 delta_V
         self.V_x = np.empty((N, self.dynamics.state_size))
         self.V_xx = np.empty((N, self.dynamics.state_size, self.dynamics.state_size))
 
@@ -337,7 +337,7 @@ class iLQR:
     def _backward_pass(self):
         """Computes the feedforward and feedback gains k and K.
         """
-        self.dV = np.zeros(self.N)
+        # self.dV = np.zeros(self.N)
         self.V_x = np.zeros((self.N, self.dynamics.state_size))
         self.V_xx = np.zeros((self.N, self.dynamics.state_size, self.dynamics.state_size))
         self.k = np.zeros((self.N, self.dynamics.action_size))
@@ -368,7 +368,7 @@ class iLQR:
         self.k[key] = -np.linalg.solve(Q_uu, Q_u)
         self.K[key] = -np.linalg.solve(Q_uu, Q_ux)
 
-        self.dV[key] = self.k[key].dot(Q_u) + 0.5 * self.k[key].dot(Q_uu).dot(self.k[key])
+        # self.dV[key] = self.k[key].dot(Q_u) + 0.5 * self.k[key].dot(Q_uu).dot(self.k[key])
 
         self.V_x[key] = Q_x + self.K[key].T.dot(Q_uu).dot(self.k[key])
         self.V_x[key] += self.K[key].T.dot(Q_u) + Q_ux.T.dot(self.k[key])
