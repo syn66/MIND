@@ -33,14 +33,14 @@ class Simulator:
 
         self.sim_time = 0.0
         self.sim_step = 0.02
-        self.sim_horizon = 4
+        self.sim_horizon = 500
         self.agents = []
         self.frames = []
 
     def run(self):
         self.init_sim()
         self.run_sim()
-        # self.render_video()
+        self.render_video()
 
     def init_sim(self):
         self.agents = []

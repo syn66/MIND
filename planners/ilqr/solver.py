@@ -93,27 +93,31 @@ class iLQR:
         """
         self.cost = cost
         N = len(us_init)
-        self.N = N
-        self._k = np.zeros((N, self.dynamics.action_size))
-        self._K = np.zeros((N, self.dynamics.action_size, self.dynamics.state_size))
+        self.N = N # 规划时域
+        self._k = np.zeros((N, self.dynamics.action_size)) # N * Nu 
+        self._K = np.zeros((N, self.dynamics.action_size, self.dynamics.state_size)) # N * Nu * Nx
 
-        self.xs = np.empty((N, self.dynamics.state_size))
-        self.us = np.empty((N, self.dynamics.action_size))
-        self.F_x = np.empty((N, self.dynamics.state_size, self.dynamics.state_size))
-        self.F_u = np.empty((N, self.dynamics.state_size, self.dynamics.action_size))
+        self.xs = np.empty((N, self.dynamics.state_size)) # 规划时域状态 stages 集合 N * Nx
+        self.us = np.empty((N, self.dynamics.action_size))# 规划时域控制 stages 集合 N * Nu
 
+        self.F_x = np.empty((N, self.dynamics.state_size, self.dynamics.state_size)) # 微分方程对 x的导数？ N * Nx * Nx
+        self.F_u = np.empty((N, self.dynamics.state_size, self.dynamics.action_size)) # 微分方程 u的导数？ N * Nx * Nu
+
+        # 二阶 hessian 矩阵 DDP
         if self._use_hessians:
             self.F_xx = np.empty((N, self.dynamics.state_size, self.dynamics.state_size, self.dynamics.state_size))
             self.F_ux = np.empty((N, self.dynamics.state_size, self.dynamics.action_size, self.dynamics.state_size))
             self.F_uu = np.empty((N, self.dynamics.state_size, self.dynamics.action_size, self.dynamics.action_size))
 
-        self.L = np.empty(N)
+        self.L = np.empty(N) # cost func
         self.L_x = np.empty((N, self.dynamics.state_size))
         self.L_u = np.empty((N, self.dynamics.action_size))
         self.L_xx = np.empty((N, self.dynamics.state_size, self.dynamics.state_size))
         self.L_ux = np.empty((N, self.dynamics.action_size, self.dynamics.state_size))
         self.L_uu = np.empty((N, self.dynamics.action_size, self.dynamics.action_size))
-        self.dV = np.empty(N)
+
+        # cost to go 值函数
+        self.dV = np.empty(N) # cost to go 值函数的导数?
         self.V_x = np.empty((N, self.dynamics.state_size))
         self.V_xx = np.empty((N, self.dynamics.state_size, self.dynamics.state_size))
 
@@ -165,6 +169,7 @@ class iLQR:
         self._nominal_us = self.us
 
         return self.xs, self.us
+    
 
     def _check_convergence(self, J_new):
         """Checks if the algorithm has converged.

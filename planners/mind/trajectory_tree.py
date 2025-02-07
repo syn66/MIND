@@ -23,10 +23,10 @@ class TrajectoryTreeOptimizer:
         offsets, xx, yy, dist_field = gen_dist_field(x0, target_lane, grid_size, res)
         quad_dist_field = dist_field ** 2
 
-        print("offsets:", offsets)
-        print("xx:", xx)
-        print("yy:", yy)
-        print("dist_field:", dist_field)
+        # print("offsets:", offsets)
+        # print("xx:", xx)
+        # print("yy:", yy)
+        # print("dist_field:", dist_field)
 
 
         cost_tree = Tree()
@@ -38,10 +38,10 @@ class TrajectoryTreeOptimizer:
             cur_node = queue.pop()
             # [prob] [ego + exo, N, state_dim] [ego + exo, N, state_dim, state_dim]
             prob, trajs, covs, tgt_pts = cur_node.data
-            print("prob: ", prob)
+            # print("prob: ", prob)
             last_index = last_traj_node_index[cur_node.parent_key] if cur_node.parent_key is not None else -1
             duration = trajs.shape[1]
-            print("duration",duration)
+            # print("duration",duration)
             for i in range(duration):
                 if i % 2 == 1:
                     continue

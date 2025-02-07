@@ -16,7 +16,7 @@
     "cl_agents": [
         {
             "id": "AV",
-            "enable_timestep": 0.0,
+            "enable_timestep": 4.0,
             "semantic_lane": -1,
             "target_velocity": 8,
             "agent": "agent:MINDAgent",
