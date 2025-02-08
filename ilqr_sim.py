@@ -92,11 +92,9 @@ if __name__ == '__main__':
         cost_tree.add_node(Node(cur_index, last_index, [[state_pot, state_con], [ctrl_pot]]))
         last_index = cur_index
 
-    cost_tree.print()
 
     cost_tree = TreeCost(cost_tree, 6, config.action_size)
 
-    print("1111111111111111111")
 
     us_init = np.zeros((cost_tree.tree.size() - 1, config.action_size))
     xs, us = ilqr.fit(us_init, cost_tree)

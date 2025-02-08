@@ -338,15 +338,20 @@ class iLQR:
         """Computes the feedforward and feedback gains k and K.
         """
         # self.dV = np.zeros(self.N)
-        self.V_x = np.zeros((self.N, self.dynamics.state_size))
-        self.V_xx = np.zeros((self.N, self.dynamics.state_size, self.dynamics.state_size))
+        self.V_x = np.zeros((self.N, self.dynamics.state_size)) # N 个 Nx * 1 的向量
+        self.V_xx = np.zeros((self.N, self.dynamics.state_size, self.dynamics.state_size)) # N 个 Nx * Nx 的矩阵
+
+        # LQR问题的反馈增益 ricatti
         self.k = np.zeros((self.N, self.dynamics.action_size))
         self.K = np.zeros((self.N, self.dynamics.action_size, self.dynamics.state_size))
 
         # Recursive backward pass.
         self._recursive_backward_pass(self.cost.tree.get_root_key())
 
+
+    # 从cost tree 的根节点开始递归求解 值函数 树的每一个节点为规划的一个时刻，包含cost
     def _recursive_backward_pass(self, key):
+        # 遍历该父节点的子节点 
         for child_key in self.cost.tree.get_children_keys(key):
             self._recursive_backward_pass(child_key)
             self._get_feedback_gains(child_key)
@@ -375,7 +380,7 @@ class iLQR:
 
         self.V_xx[key] = Q_xx + self.K[key].T.dot(Q_uu).dot(self.K[key])
         self.V_xx[key] += self.K[key].T.dot(Q_ux) + Q_ux.T.dot(self.K[key])
-        self.V_xx[key] = 0.5 * (self.V_xx[key] + self.V_xx[key].T)  # To maintain symmetry.
+        self.V_xx[key] = 0.5 * (self.V_xx[key] + self.V_xx[key].T)  # To maintain symmetry.  这个和MPCC中对Hessian矩阵的处理一致，正则？
 
     def _Q(self, f_x, f_u, l_x, l_u, l_xx, l_ux, l_uu, V_x, V_xx,
            f_xx=None, f_ux=None, f_uu=None):
